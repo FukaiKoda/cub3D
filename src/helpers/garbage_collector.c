@@ -6,17 +6,28 @@
 /*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:28:32 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/13 15:36:31 by habdella         ###   ########.fr       */
+/*   Updated: 2025/09/16 14:51:29 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/Dcast.h"
+#include "../../include/Dcast.h"
 
-void	burn_garbage(t_game *game)
+t_game	*save_game(t_game *game)
+{
+	static t_game	*saved;
+
+	if (game)
+		saved = game;
+	return (saved);
+}
+
+void	burn_garbage()
 {
 	t_gc	*curr;
 	t_gc	*nxt;
+	t_game	*game;
 
+	game = save_game(0);
 	if (!game->collector)
 		return ;
 	curr = game->collector;
@@ -31,14 +42,16 @@ void	burn_garbage(t_game *game)
 	game->collector = NULL;
 }
 
-void	add_to_garbage(t_game *game, void *ptr)
+void	add_to_garbage(void *ptr)
 {
 	t_gc	*node;
 	t_gc	*curr;
+	t_game	*game;
 
+	game = save_game(0);
 	node = malloc(sizeof(t_gc));
 	if (!node)
-		return (burn_garbage(game));
+		return (burn_garbage());
 	node->address = ptr;
 	node->next = NULL;
 	if (!game->collector)
@@ -52,22 +65,29 @@ void	add_to_garbage(t_game *game, void *ptr)
 	curr->next = node;
 }
 
-void	*ft_malloc(t_game *game, size_t size)
+void	*ft_malloc(size_t size)
 {
 	void	*p;
 
 	p = malloc(size);
 	if (!p)
 	{
-		burn_garbage(game);
+		burn_garbage();
 		exit(1);
 	}
-	add_to_garbage(game, p);
+	add_to_garbage(p);
 	return (p);
 }
 
-void	clean_exit(t_game *game)
+void	clean_exit(char *message)
 {
-	burn_garbage(game);
+	t_game	*game;
+
+	game = save_game(0);
+	if (message)
+		putstr_fd(message, 2);
+	if (game->file.fd)
+		close(game->file.fd);
+	burn_garbage();
 	exit(1);
 }
