@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:28:32 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/16 14:51:29 by habdella         ###   ########.fr       */
+/*   Updated: 2025/09/16 22:07:08 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,7 @@ void	clean_exit(char *message)
 	if (game->file.fd)
 		close(game->file.fd);
 	burn_garbage();
-	exit(1);
+	if (message)
+		exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 }
