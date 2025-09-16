@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   greed_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/14 10:06:59 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/16 17:03:47 by habdella         ###   ########.fr       */
+/*   Created: 2025/09/16 17:16:07 by habdella          #+#    #+#             */
+/*   Updated: 2025/09/16 17:16:30 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/Dcast.h"
+# include "../../include/Dcast.h"
 
-int main(int argc, char **argv)
+bool	is_player(char c)
 {
-    t_game game;
+	return (c == 'N' || c == 'E' || c == 'S' || c == 'W');
+}
 
-    if (initial_checks(argc, argv))
-        return 1;
-    save_game(&game);
-    memset(&game, 0, sizeof(game));
-    parse_map(&game, argv[1]);
-    // render_map(&game);
-    // raycasting
-    clean_exit(NULL);
-    return 0;
+void	save_cord_player(t_game *game, int x, int y, char direction)
+{
+	if (game->player.x != -1)
+		clean_exit("duplicated player");
+	game->player.x = x;
+	game->player.y = y;
+	game->player.dir = direction;
 }
