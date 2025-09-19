@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:33:55 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/16 16:12:25 by habdella         ###   ########.fr       */
+/*   Updated: 2025/09/16 22:11:20 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	greed_parse(t_game *game)
 		len = ft_strlen(line);
 		if (game->map.map_width < len)
 			game->map.map_width = len;
+		if (len == 0)
+			clean_exit("Empty line in the map\n");
 		add_back(&game->list, line);
 		game->map.map_height++;
 		line = get_next_line(game, game->file.fd);
