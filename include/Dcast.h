@@ -6,7 +6,7 @@
 /*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:34:11 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/16 17:16:47 by habdella         ###   ########.fr       */
+/*   Updated: 2025/09/25 14:09:43 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@
 
 # include "/home/habdella/include/minilibx-linux/mlx.h"
 
+# define WIDTH		1060
+# define HEIGHT		900
+# define TILE_SIZE	12
+/* --------- colors --------- */
 # define BLACK 		0x000000
 # define WHITE		0xFFFFFF
 # define RED		0xFF0000
@@ -40,18 +44,25 @@
 # define ORANGE		0xFFA500
 # define PURPLE		0x800080
 # define BROWN		0xA52A2A
-
-# define WIDTH	800
-# define HEIGHT	800
-
-# define WHITESPACES	" \t\n\v\f\r"
-
+/* -------------------------- */
+/* ---------- keys ---------- */
+# define KEY_ESC	65307
+# define KEY_UP		65362
+# define KEY_DOWN	65364
+# define KEY_LEFT	65361
+# define KEY_RIGHT	65363
+/* -------------------------- */
+/* ------- directions ------- */
 # define	NO		0
 # define	EA		1
 # define	SO		2
 # define	WE		3
 # define	FLOOR	4
 # define	CEILING	5
+/* -------------------------- */
+# define WHITESPACES	" \t\n\v\f\r"
+
+# define PI 3.1415927
 
 typedef struct s_colors
 {
@@ -65,6 +76,12 @@ typedef struct s_player
 	double	x;
 	double	y;
 	char	dir;
+	float	radius;
+	int		turnDirection;
+	int		walkDirection;
+	float	moveSpeed;
+	float	rotationAngle;
+	float	rotaionSpeed;
 }	t_player;
 
 typedef struct s_map
@@ -157,12 +174,16 @@ void	check_valid_greed(t_game *game);
 bool	is_valid_element(char c);
 bool	is_empty_line(char *s);
 
-/* ///////////////// ray-casting functions \\\\\\\\\\\\\\\\\ */
+/* ///////////////// events functions \\\\\\\\\\\\\\\\\ */
 
-
+void    init_events(t_game *game);
 
 /* ///////////////// rendering functions \\\\\\\\\\\\\\\\\ */
 
+void    init_render(t_game *game);
+void    minimap_render(t_game *game);
+void	my_pixel_put(int x, int y, t_game *game, int color);
 
+/* ///////////////// ray-casting functions \\\\\\\\\\\\\\\\\ */
 
 #endif
