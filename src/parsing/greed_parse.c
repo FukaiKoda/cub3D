@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   greed_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:47:03 by habdella          #+#    #+#             */
 /*   Updated: 2025/09/25 09:09:56 by habdella         ###   ########.fr       */
@@ -12,52 +12,60 @@
 
 # include "../../include/Dcast.h"
 
-void	floodfill(t_game *game, char **greed, int x, int y)
+void	floodfill(t_game *game, bool **visited, int x, int y)
 {
 	if (x < 0 || x >= game->map.map_height || y < 0 || y >= game->map.map_width)
-		clean_exit("Invalid map\n");
-	
-	if (greed[x][y] == '\x7f' || greed[x][y] == '1')
+		clean_exit("Map is not closed\n");
+
+	if (visited[x][y] || game->map.greed[x][y] == '1')
 		return ;
 
-	if (!is_valid_element(greed[x][y]))
+	if (!is_valid_element(game->map.greed[x][y]))
 		clean_exit("Invalid map character\n");
 
-	if (is_player(greed[x][y]))
-		save_cord_player(game, x, y, greed[x][y]);
+	if (is_player(game->map.greed[x][y]))
+		save_cord_player(game, x, y, game->map.greed[x][y]);
 
-	greed[x][y] = '\x7f'; // it will be modified
+	visited[x][y] = true;
 
-	floodfill(game, greed, x + 1, y);
-	floodfill(game, greed, x - 1, y);
-	floodfill(game, greed, x, y + 1);
-	floodfill(game, greed, x, y - 1);
+	floodfill(game, visited, x + 1, y);
+	floodfill(game, visited, x - 1, y);
+	floodfill(game, visited, x, y + 1);
+	floodfill(game, visited, x, y - 1);
 }
 
-char	**map_copy(t_game *game)
+bool	**init_visited(int height, int width)
 {
-	char	**copy;
-	int		i;
-
-	i = 0;
-	copy = ft_malloc(sizeof(char *) * (game->map.map_height + 1));
-	copy[game->map.map_height] = NULL;
-	while (i < game->map.map_height)
-	{
-		copy[i] = ft_strdup(game->map.greed[i]);
-		i++;
-	}
-	return (copy);
-}
-
-void	check_valid_greed(t_game *game)
-{
-	char	**copy;
+	bool	**visited;
 	int		i;
 	int		j;
 
 	i = 0;
-	copy = map_copy(game);
+	visited = ft_malloc(sizeof(bool *) * height);
+	while (i < height)
+	{
+		visited[i] = ft_malloc(sizeof(bool) * width);
+		j = 0;
+		while (j < width)
+		{
+			visited[i][j] = false;
+			j++;
+		}
+		i++;
+	}
+	return (visited);
+}
+
+void	check_valid_greed(t_game *game)
+{
+	char	**map;
+	bool	**visited;
+	int		i;
+	int		j;
+
+	i = 0;
+	map = game->map.greed;
+	visited = init_visited(game->map.map_height, game->map.map_width);
 	game->player.x = -1;
 	game->player.y = -1;
 	while (i < game->map.map_height)
@@ -65,14 +73,16 @@ void	check_valid_greed(t_game *game)
 		j = 0;
 		while (j < game->map.map_width)
 		{
-			if (copy[i][j] == '0' || is_player(copy[i][j]))
-				floodfill(game, copy, i, j);
-			else if (!is_valid_element(copy[i][j]))
+			if (!visited[i][j] && (map[i][j] == '0' || is_player(map[i][j])))
+				floodfill(game, visited, i, j);
+			else if (!is_valid_element(map[i][j]))
 				clean_exit("Invalid map character\n");
 			j++;
 		}
 		i++;
 	}
+	if (game->player.x == -1)
+		clean_exit("No player found\n");
 }
 
 char *ft_strdup_pad(const char *src, int width)

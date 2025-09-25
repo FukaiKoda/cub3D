@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   file_parse.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 08:49:31 by habdella          #+#    #+#             */
 /*   Updated: 2025/09/25 08:19:06 by habdella         ###   ########.fr       */
@@ -52,20 +52,19 @@ int	which_type(char **split, int size)
 
 void	scan_map_inputs(t_game *game)
 {
-    char    *line;
-	int		i;
+	char	*line;
 	int		type;
 	int		size;
 	char	mask;
 
-	(1) && (i = 0, mask = 0);
-	while (i < 6)
+	mask = 0;
+	while (mask != 0b00111111)
 	{
 		line = get_next_line(game, game->file.fd);
 		if (!line)
-			break ;
+			clean_exit("Missing required map elements\n");
 		if (is_empty_line(line))
-			continue;
+			continue ;
 		game->split = ft_split(line, WHITESPACES, &size);
 		type = which_type(game->split, size);
 		if (type == -1)
@@ -74,7 +73,6 @@ void	scan_map_inputs(t_game *game)
 			textures_parse(game, &mask, type);
 		else
 			floor_ceiling_parse(game, &mask, type);
-		i++;
 	}
 	greed_parse(game);
 }
@@ -82,8 +80,8 @@ void	scan_map_inputs(t_game *game)
 void	parse_map(t_game *game, char *argv)
 {
 	game->file.name = argv;
-    game->file.fd = open(game->file.name, O_RDONLY);
-    scan_map_inputs(game);
-    close(game->file.fd);
-    return ;
+	game->file.fd = open(game->file.name, O_RDONLY);
+	scan_map_inputs(game);
+	close(game->file.fd);
+	return ;
 }
