@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 10:38:06 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/14 18:40:22 by habdella         ###   ########.fr       */
+/*   Updated: 2025/09/30 09:28:29 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/Dcast.h"
-
-# define BUFFER_SIZE 1337
 
 char	*ft_strdupnl(char *contain)
 {

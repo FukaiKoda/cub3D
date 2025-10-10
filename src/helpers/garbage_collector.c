@@ -6,7 +6,7 @@
 /*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:28:32 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/16 22:07:08 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/03 10:46:48 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_game	*save_game(t_game *game)
 	return (saved);
 }
 
-void	burn_garbage()
+void	burn_garbage(void)
 {
 	t_gc	*curr;
 	t_gc	*nxt;
@@ -51,7 +51,10 @@ void	add_to_garbage(void *ptr)
 	game = save_game(0);
 	node = malloc(sizeof(t_gc));
 	if (!node)
-		return (burn_garbage());
+	{
+		burn_garbage();
+		return ;
+	}
 	node->address = ptr;
 	node->next = NULL;
 	if (!game->collector)
@@ -86,8 +89,11 @@ void	clean_exit(char *message)
 	game = save_game(0);
 	if (message)
 		putstr_fd(message, 2);
-	if (game->file.fd)
+	if (game->file.fd != -1)
+	{
 		close(game->file.fd);
+		game->file.fd = -1;
+	}
 	burn_garbage();
 	if (message)
 		exit(EXIT_FAILURE);

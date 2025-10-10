@@ -6,11 +6,11 @@
 /*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:33:55 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/16 22:11:20 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/08 11:15:37 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../include/Dcast.h"
+#include "../../include/Dcast.h"
 
 void	greed_parse(t_game *game)
 {
@@ -41,6 +41,10 @@ void	greed_parse(t_game *game)
 
 void	floor_ceiling_parse(t_game *game, char *mask, int type)
 {
+	int		r;
+	int		g;
+	int		b;
+
 	game->split = ft_split(game->split[1], ",", &game->split_len);
 	if (game->split_len != 3)
 		clean_exit("Invalid number of RGB colors\n");
@@ -49,14 +53,16 @@ void	floor_ceiling_parse(t_game *game, char *mask, int type)
 	*mask |= (1 << type);
 	if (type == FLOOR)
 	{
-		game->disp.floor.red = ft_atoi(game->split[0]);
-		game->disp.floor.green = ft_atoi(game->split[1]);
-		game->disp.floor.blue = ft_atoi(game->split[2]);
+		r = ft_atoi(game->split[0]);
+		g = ft_atoi(game->split[1]);
+		b = ft_atoi(game->split[2]);
+		game->disp.floor = r << 16 | g << 8 | b;
 		return ;
 	}
-	game->disp.ceiling.red = ft_atoi(game->split[0]);
-	game->disp.ceiling.green = ft_atoi(game->split[1]);
-	game->disp.ceiling.blue = ft_atoi(game->split[2]);
+	r = ft_atoi(game->split[0]);
+	g = ft_atoi(game->split[1]);
+	b = ft_atoi(game->split[2]);
+	game->disp.ceiling = r << 16 | g << 8 | b;
 }
 
 void	textures_parse(t_game *game, char *mask, int type)

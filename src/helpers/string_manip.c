@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string_manip.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 09:00:39 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/16 12:53:31 by habdella         ###   ########.fr       */
+/*   Updated: 2025/09/30 09:29:24 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +112,3 @@ char	*ft_strjoin(char *s1, char *s2)
 	p[i] = '\0';
 	return (p);
 }
-

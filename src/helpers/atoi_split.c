@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   atoi_split.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 10:57:29 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/16 16:03:15 by habdella         ###   ########.fr       */
+/*   Updated: 2025/09/30 11:18:59 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,15 @@ int	ft_atoi(const char *nptr)
 	while ((*nptr >= 9 && *nptr <= 13) || *nptr == 32)
 		nptr++;
 	if (!(*nptr >= '0' && *nptr <= '9'))
-		clean_exit("only numbers are accepted\n");;
+		clean_exit("only numbers are accepted\n");
 	while (*nptr >= '0' && *nptr <= '9')
 	{
 		num = (*nptr - '0') + (num * 10);
+		if (num < 0 || num > 255)
+			clean_exit("number out of RGB range\n");
 		nptr++;
 	}
-    if (num >= 0 && num <= 255)
-	    return (num);
-	clean_exit("number out of RGB range\n");
-    return (-1);
+	return (num);
 }
 
 int	check(char *charset, char c)
