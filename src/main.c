@@ -3,39 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 10:06:59 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/25 14:09:49 by habdella         ###   ########.fr       */
+/*   Updated: 2025/10/08 17:40:36 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/Dcast.h"
 
-void    init_player(t_player *player)
+inline static int	game_loop(t_game *game)
 {
-    player->radius = 3;
-    player->turnDirection = 0;
-    player->walkDirection = 0;
-    player->moveSpeed = 3.0;
-    player->rotationAngle = PI / 2;
-    player->rotaionSpeed = 3 * (PI / 180);
+	t_coord	pos;
+	t_coord	size;
+
+	pos = (t_coord){0, 0};
+	size = (t_coord){WIDTH, game->half_height};
+	rectangle(game, pos, size, game->disp.ceiling);
+	pos = (t_coord){0, game->half_height};
+	rectangle(game, pos, size, game->disp.floor);
+	render_3d(game);
+	if (game->display_minimap)
+		display_minimap(game);
+	mlx_put_image_to_window(game->disp.mlx, game->disp.window,
+		game->disp.img, 0, 0);
+	fps_counter(game);
+	display_fps(game);
+	return (0);
 }
 
-int main(int argc, char **argv)
+inline static void	start_game(t_game *game)
 {
-    t_game game;
+	game->half_fov = FOV_ANGLE / 2.0;
+	game->half_width = WIDTH / 2.0;
+	game->half_height = HEIGHT / 2.0;
+	game->proj_plane_dist = game->half_width / tan(game->half_fov);
+	init_rendering(game);
+	init_textures(game);
+	init_events(game);
+	init_player(game);
+	init_rays(game);
+	mlx_loop_hook(game->disp.mlx, game_loop, game);
+	mlx_loop(game->disp.mlx);
+	clean_exit(NULL);
+}
 
-    if (initial_checks(argc, argv))
-        return 1;
-    save_game(&game);
-    memset(&game, 0, sizeof(game));
-    parse_map(&game, argv[1]);
-    init_render(&game);
-    init_player(&game.player);
-    // mainmap_render(game);
-    minimap_render(&game);
-    mlx_loop(game.disp.mlx);
-    clean_exit(NULL);
-    return 0;
+int	main(int argc, char **argv)
+{
+	t_game	game;
+
+	if (initial_checks(argc, argv))
+		return (1);
+	memset(&game, 0, sizeof(t_game));
+	save_game(&game);
+	parse_map(&game, argv[1]);
+	start_game(&game);
+	return (0);
 }

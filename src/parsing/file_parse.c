@@ -6,7 +6,7 @@
 /*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 08:49:31 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/25 08:19:06 by habdella         ###   ########.fr       */
+/*   Updated: 2025/09/30 11:13:43 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 bool	is_valid_element(char c)
 {
-	return (c == '0' || c == '1' || c == ' ' || c == '\x7f'
-		|| c == 'N' || c == 'E' || c == 'S' || c == 'W' || c == 'V');
+	return (c == '0' || c == '1' || c == ' '
+		|| c == 'N' || c == 'E' || c == 'S' || c == 'W');
 }
 
-bool is_empty_line(char *s)
+bool	is_empty_line(char *s)
 {
 	if (!s)
-		return true;
+		return (true);
 	while (*s)
 	{
 		if (*s != 32)
