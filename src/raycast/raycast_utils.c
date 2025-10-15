@@ -63,5 +63,5 @@ bool	is_wall(t_game *game, float x, float y)
 		return (true);
 	map_x = (int)(x / TILE_SIZE);
 	map_y = (int)(y / TILE_SIZE);
-	return (game->map.greed[map_y][map_x] == '1');
+	return (game->map.grid[map_y][map_x] == '1');
 }

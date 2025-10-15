@@ -3,14 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   rendering.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 12:22:56 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/09 11:49:16 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/15 20:55:22 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/Dcast.h"
+
+void	update_animation(t_game *game)
+{
+	static double	last_time = 0;
+	double			current_time;
+	double			delta;
+
+	current_time = get_time_ms();
+	if (last_time == 0)
+		last_time = current_time;
+	delta = (current_time - last_time) / 1000.0;
+	last_time = current_time;
+	game->disp.tex_anim.elapsed_time += delta;
+	if (game->disp.tex_anim.elapsed_time >= game->disp.tex_anim.frame_time)
+	{
+		game->disp.tex_anim.elapsed_time = 0;
+		game->disp.tex_anim.current_frame
+			= (game->disp.tex_anim.current_frame + 1)
+			% game->disp.tex_anim.num_frames;
+	}
+}
 
 inline static void	prepare_wall(t_game *game, t_ray *ray, t_wall *wall)
 {
@@ -67,10 +88,16 @@ inline static void	render_wall_strip(t_game *game, t_ray *ray, int id)
 {
 	t_wall		wall;
 	t_texture	*texture;
+	int			current_frame;
 
 	prepare_wall(game, ray, &wall);
 	wall.screen_x = id * WALL_STRIP_WIDTH;
 	texture = &game->disp.tex[ray->wall_side];
+	if (texture->is_animated)
+	{
+		current_frame = game->disp.tex_anim.current_frame;
+		texture = &game->disp.tex_anim.frames[current_frame];
+	}
 	wall.tex_x = (int)((ray->wall_x / (float)TILE_SIZE) * texture->width);
 	if (wall.tex_x < 0)
 		wall.tex_x = 0;

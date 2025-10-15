@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   fps.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 11:06:27 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/08 10:51:48 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/15 20:14:18 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/Dcast.h"
+
+double	get_time_ms(void)
+{
+	struct timespec	ts;
+
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+	return (ts.tv_sec * 1000.0 + ts.tv_nsec / 1.0e6);
+}
 
 void	fps_counter(t_game *game)
 {

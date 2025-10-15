@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Dcast.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:34:11 by habdella          #+#    #+#             */
-/*   Updated: 2025/10/09 14:06:15 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/15 20:34:13 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,17 @@
 # include <time.h>
 # include <unistd.h>
 
-# include "/home/oayyoub/include/minilibx-linux/mlx.h"
+# include "/home/hatim/include/minilibx-linux/mlx.h"
 
 /* ******************************* DEFINES ******************************* */
-# define WIDTH				1500
-# define HEIGHT				1000
+# define WIDTH				1300
+# define HEIGHT				700
 # define TILE_SIZE			64
 # define FOV_ANGLE			1.047197551
 # define WALL_STRIP_WIDTH	1
 # define BUFFER_SIZE		1337
 # define WHITESPACES		" \t\n\v\f\r"
+# define MOUSE_SENSITIVITY	0.0025
 
 /* Colors */
 # define BLACK				0x000000
@@ -53,6 +54,22 @@
 # define PURPLE				0x800080
 # define BROWN				0xA52A2A
 
+/* keycode */
+# define KEY_W        119
+# define KEY_A        97
+# define KEY_S        115
+# define KEY_D        100
+
+# define KEY_H		  104
+# define KEY_R		  114
+
+# define KEY_O		  111
+
+# define KEY_LEFT     65361
+# define KEY_RIGHT    65363
+# define KEY_ESC      65307
+# define KEY_TAB      65289
+
 /* ******************************* ENUMS ********************************* */
 enum e_texture_type
 {
@@ -63,7 +80,7 @@ enum e_texture_type
 	FLOOR,
 	CEILING
 };
-
+# define DOOR 4 
 /* ******************************* TYPES ********************************* */
 typedef struct s_coord
 {
@@ -77,6 +94,7 @@ typedef struct s_player
 	float	radius;
 	char	turn_direction;
 	char	walk_direction;
+	char	strafe_direction;
 	float	rotation_angle;
 	float	move_speed;
 	float	rotation_speed;
@@ -88,6 +106,8 @@ typedef struct s_ray
 	float	ray_angle;
 	t_coord	wall_hit;
 	float	distance;
+	bool	vertical_door;
+	bool	horizontal_door;
 	bool	is_ray_facing_down;
 	bool	is_ray_facing_up;
 	bool	is_ray_facing_right;
@@ -111,7 +131,7 @@ typedef struct s_step
 
 typedef struct s_map
 {
-	char	**greed;
+	char	**grid;
 	int		map_height;
 	int		map_width;
 }	t_map;
@@ -125,7 +145,24 @@ typedef struct s_texture
 	int		bpp;
 	int		line_len;
 	int		endian;
+	bool	is_animated;
 }	t_texture;
+
+typedef struct s_texture_anim
+{
+	t_texture	frames[6];
+	int			num_frames;
+	int			current_frame;
+	float		frame_time;
+	float		elapsed_time;
+}	t_tex_anim;
+
+typedef struct s_door
+{
+	int			x;
+	int			y;
+	bool		is_open;
+}	t_door;
 
 typedef struct s_display
 {
@@ -135,7 +172,10 @@ typedef struct s_display
 	void		*img;
 	char		*pixel;
 	char		*texture[4];
-	t_texture	tex[4];
+	t_texture	tex[5];
+	t_tex_anim	tex_anim;
+	t_door		*doors;
+	int			num_doors;
 	int			bpp;
 	int			line_len;
 	int			endian;
@@ -197,6 +237,7 @@ typedef struct s_game
 	int			num_rays;
 	int			fps;
 	bool		display_minimap;
+	bool		mouse_pause;
 	float		half_fov;
 	float		half_width;
 	float		half_height;
@@ -228,13 +269,22 @@ int		exit_game(void *arg);
 t_list	*new_node(char *content);
 void	add_back(t_list **head, char *content);
 
+void	count_doors(t_game *game, char *line);
+void	save_doors_coord(t_game *game);
+
+void	init_animated_textures(t_game *game, char *paths[]);
+void	load_animated_texture(t_game *game, int index, char *path);
+void	clean_animated_textures(t_game *game);
+void	load_door_texture(t_game *game);
+bool	is_closed_door(t_game *game, bool *horz_vert, float x, float y);
+
 /* ******************************* PARSING ******************************* */
 void	parse_map(t_game *game, char *file_name);
 void	textures_parse(t_game *game, char *mask, int type);
 void	floor_ceiling_parse(t_game *game, char *mask, int type);
-void	greed_parse(t_game *game);
+void	grid_parse(t_game *game);
 void	convert_list_to_array(t_game *game);
-void	check_valid_greed(t_game *game);
+void	check_valid_grid(t_game *game);
 bool	is_valid_element(char c);
 bool	is_empty_line(char *s);
 
@@ -251,6 +301,10 @@ t_ray	cast_single_ray(t_game *game, float angle, t_coord player);
 void	render_3d(t_game *game);
 void	init_events(t_game *game);
 void	display_minimap(t_game *game);
+void	update_animation(t_game *game);
+
+void	mouse_interaction(int keycode, t_game *game);
+void	door_interaction(t_game *game);
 
 /* ******************************* DRAW UTILS **************************** */
 void	my_pixel_put(int x, int y, t_game *game, int color);
@@ -261,6 +315,9 @@ bool	is_player(char c);
 void	save_cord_player(t_game *game, int i, int j, char direction);
 void	init_player(t_game *game);
 void	update_player(t_game *game);
+void	update_player_strafe(t_game *game);
+void	strafe_direction(int keycode, t_game *game);
+void	walk_turn_direction(int keycode, t_game *game);
 bool	is_valid_position(t_game *game, int x, int y);
 
 /* ******************************* TEXTURES ****************************** */
@@ -268,7 +325,8 @@ void	init_textures(t_game *game);
 void	cleanup_textures(t_game *game);
 int		get_texture_color(t_texture *texture, int x, int y);
 
-/* ******************************* FPS *********************************** */
+/* ***************************** FPS AND TIME ***************************** */
+double	get_time_ms(void);
 void	fps_counter(t_game *game);
 void	display_fps(t_game *game);
 

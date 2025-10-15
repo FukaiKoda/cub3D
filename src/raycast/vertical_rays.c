@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vertical_rays.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 14:00:00 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/08 17:35:46 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/15 20:34:54 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,10 @@ t_hit	find_vertical(t_game *game, t_ray *ray, t_coord player)
 	setup_vertical(ray, &step, player);
 	while (is_inside_map(game, step.pos.x, step.pos.y))
 	{
-		if (is_wall(game, step.pos.x - ray->is_ray_facing_left,
-				step.pos.y))
+		if (is_wall(game, step.pos.x - ray->is_ray_facing_left, step.pos.y)
+			|| is_closed_door(game,
+				&ray->vertical_door, step.pos.x - ray->is_ray_facing_left
+				, step.pos.y))
 		{
 			hit.found = true;
 			hit.pos = step.pos;

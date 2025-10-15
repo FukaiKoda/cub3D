@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_textures.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:55:21 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/03 10:35:56 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/15 20:17:45 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,26 @@ static void	load_single_texture(t_game *game, int index)
 	char		*path;
 
 	tex = &game->disp.tex[index];
+	tex->is_animated = false;
 	path = game->disp.texture[index];
 	if (!path)
-		clean_exit("Texture path is NULL\n");
+		(1) && (putstr_fd("Texture path is NULL\n", 2), exit_game(0));
+	if (!strncmp(path, "./assets/wall_torch_", 20))
+		tex->is_animated = true;
 	tex->img = mlx_xpm_file_to_image(game->disp.mlx, path,
 			&tex->width, &tex->height);
 	if (!tex->img)
 	{
 		putstr_fd("Error: Failed to load texture: ", 2);
-		putstr_fd(path, 2);
-		putstr_fd("\n", 2);
-		clean_exit("Failed to load texture\n");
+		(1) && (putstr_fd(path, 2), putstr_fd("\n", 2), exit_game(0));
 	}
 	tex->data = mlx_get_data_addr(tex->img, &tex->bpp,
 			&tex->line_len, &tex->endian);
 	if (!tex->data)
-		clean_exit("Failed to get texture data\n");
+	{
+		putstr_fd("Failed to get texture data\n", 2);
+		exit_game(0);
+	}
 }
 
 void	cleanup_textures(t_game *game)
@@ -55,7 +59,7 @@ void	cleanup_textures(t_game *game)
 	if (!game || !game->disp.mlx)
 		return ;
 	i = 0;
-	while (i < 4)
+	while (i < 5)
 	{
 		if (game->disp.tex[i].img)
 		{
@@ -64,11 +68,13 @@ void	cleanup_textures(t_game *game)
 		}
 		i++;
 	}
+	clean_animated_textures(game);
 }
 
 void	init_textures(t_game *game)
 {
-	int	i;
+	int		i;
+	char	*paths[6];
 
 	if (!game->disp.mlx)
 		clean_exit("MLX not initialized before loading textures\n");
@@ -76,6 +82,15 @@ void	init_textures(t_game *game)
 	while (i < 4)
 	{
 		load_single_texture(game, i);
+		i++;
+	}
+	if (game->disp.num_doors)
+		load_door_texture(game);
+	init_animated_textures(game, paths);
+	i = 0;
+	while (i < 6)
+	{
+		load_animated_texture(game, i, paths[i]);
 		i++;
 	}
 }
