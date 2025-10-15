@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_parse.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 08:49:31 by habdella          #+#    #+#             */
-/*   Updated: 2025/09/30 11:13:43 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/12 18:15:18 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	is_valid_element(char c)
 {
-	return (c == '0' || c == '1' || c == ' '
+	return (c == '0' || c == '1' || c == ' ' || c == 'D'
 		|| c == 'N' || c == 'E' || c == 'S' || c == 'W');
 }
 
@@ -74,7 +74,7 @@ void	scan_map_inputs(t_game *game)
 		else
 			floor_ceiling_parse(game, &mask, type);
 	}
-	greed_parse(game);
+	grid_parse(game);
 }
 
 void	parse_map(t_game *game, char *argv)

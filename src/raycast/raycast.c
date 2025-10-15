@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 22:44:40 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/09 10:54:16 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/15 20:33:56 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,18 @@ inline static t_hit	select_hit(t_hit horizontal, t_hit vertical, t_ray *ray)
 	if (vertical.found && (!horizontal.found
 			|| vertical.distance < horizontal.distance))
 	{
-		if (ray->is_ray_facing_right)
+		if (ray->vertical_door)
+			ray->wall_side = DOOR;
+		else if (ray->is_ray_facing_right)
 			ray->wall_side = WE;
 		else
 			ray->wall_side = EA;
 		ray->wall_x = fmod(vertical.pos.y, TILE_SIZE);
 		return (vertical);
 	}
-	if (ray->is_ray_facing_down)
+	if (ray->horizontal_door)
+		ray->wall_side = DOOR;
+	else if (ray->is_ray_facing_down)
 		ray->wall_side = NO;
 	else
 		ray->wall_side = SO;
@@ -61,6 +65,8 @@ t_ray	cast_single_ray(t_game *game, float angle, t_coord player)
 	t_hit	final;
 
 	ray.ray_angle = normalize_angle(angle);
+	ray.horizontal_door = false;
+	ray.vertical_door = false;
 	set_ray_direction(&ray);
 	horizontal = find_horizontal(game, &ray, player);
 	vertical = find_vertical(game, &ray, player);

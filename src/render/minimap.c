@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 21:24:39 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/09 11:41:36 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/13 14:15:59 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,22 +70,24 @@ inline static void	draw_minimap_tiles(t_game *game, int minimap_size)
 	t_coord	pos;
 	t_coord	size;
 
-	i = 0;
-	while (i < game->map.map_height)
+	i = -1;
+	while (++i < game->map.map_height)
 	{
-		j = 0;
-		while (j < game->map.map_width)
+		j = -1;
+		while (++j < game->map.map_width)
 		{
-			if (game->map.greed[i][j] == '1')
+			if (game->map.grid[i][j] == '1')
 				color = BLACK;
+			else if (game->map.grid[i][j] == ' ')
+				color = DARK_GRAY;
+			else if (game->map.grid[i][j] == 'D')
+				color = LIGHT_GRAY;
 			else
 				color = WHITE;
 			pos = (t_coord){j * minimap_size, i * minimap_size};
 			size = (t_coord){minimap_size, minimap_size};
 			rectangle(game, pos, size, color);
-			j++;
 		}
-		i++;
 	}
 }
 
@@ -93,7 +95,7 @@ void	display_minimap(t_game *game)
 {
 	int	minimap_size;
 
-	minimap_size = 16;
+	minimap_size = 13;
 	draw_minimap_tiles(game, minimap_size);
 	circle(game->player.pos.x * minimap_size, game->player.pos.y * minimap_size,
 		3, game);

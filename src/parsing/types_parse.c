@@ -12,7 +12,7 @@
 
 #include "../../include/Dcast.h"
 
-void	greed_parse(t_game *game)
+void	grid_parse(t_game *game)
 {
 	char	*line;
 	int		len;
@@ -35,7 +35,7 @@ void	greed_parse(t_game *game)
 		line = get_next_line(game, game->file.fd);
 	}
 	convert_list_to_array(game);
-	check_valid_greed(game);
+	check_valid_grid(game);
 	return ;
 }
 

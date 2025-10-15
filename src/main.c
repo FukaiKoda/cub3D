@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 10:06:59 by habdella          #+#    #+#             */
-/*   Updated: 2025/10/08 17:40:36 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/14 23:03:59 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ inline static int	game_loop(t_game *game)
 	t_coord	pos;
 	t_coord	size;
 
+	update_animation(game);
 	pos = (t_coord){0, 0};
 	size = (t_coord){WIDTH, game->half_height};
 	rectangle(game, pos, size, game->disp.ceiling);
@@ -34,6 +35,7 @@ inline static int	game_loop(t_game *game)
 
 inline static void	start_game(t_game *game)
 {
+	game->mouse_pause = true;
 	game->half_fov = FOV_ANGLE / 2.0;
 	game->half_width = WIDTH / 2.0;
 	game->half_height = HEIGHT / 2.0;

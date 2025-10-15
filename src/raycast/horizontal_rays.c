@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   horizontal_rays.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 14:00:00 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/08 17:35:46 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/15 20:53:01 by habdella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ t_hit	find_horizontal(t_game *game, t_ray *ray, t_coord player)
 	setup_horizontal(ray, &step, player);
 	while (is_inside_map(game, step.pos.x, step.pos.y))
 	{
-		if (is_wall(game, step.pos.x, step.pos.y - ray->is_ray_facing_up))
+		if (is_wall(game, step.pos.x, step.pos.y - ray->is_ray_facing_up)
+			|| is_closed_door(game, &ray->horizontal_door, step.pos.x,
+				step.pos.y - ray->is_ray_facing_up))
 		{
 			hit.found = true;
 			hit.pos = step.pos;

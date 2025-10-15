@@ -1,0 +1,19 @@
+{
+   X11_writev_uninit_bytes
+   Memcheck:Param
+   writev(vector[0])
+   fun:writev
+   fun:xcb_writev
+   fun:_XSend
+   fun:_XReadEvents
+   fun:XWindowEvent
+}
+
+{
+   X11_init_false_positive
+   Memcheck:Param
+   writev(vector[0])
+   fun:writev
+   obj:/usr/lib/x86_64-linux-gnu/libxcb.so.*
+}
+
