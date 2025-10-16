@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_movement.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 22:00:00 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/15 02:44:22 by habdella         ###   ########.fr       */
+/*   Updated: 2025/10/15 23:49:15 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	init_player(t_game *game)
 	game->player.turn_direction = 0;
 	game->player.strafe_direction = 0;
 	game->player.walk_direction = 0;
-	game->player.move_speed = 5.0;
+	game->player.move_speed = 0.1;
 	game->player.rotation_speed = 3 * (M_PI / 180);
 }
 
@@ -58,8 +58,7 @@ void	update_player_strafe(t_game *game)
 	float	buffer;
 	t_coord	new_pos;
 
-	strafe_step = game->player.strafe_direction * game->player.move_speed
-		/ TILE_SIZE;
+	strafe_step = game->player.strafe_direction * game->player.move_speed;
 	new_pos.x = game->player.pos.x + cos(game->player.rotation_angle + M_PI_2)
 		* strafe_step;
 	new_pos.y = game->player.pos.y + sin(game->player.rotation_angle + M_PI_2)
@@ -79,8 +78,7 @@ void	update_player(t_game *game)
 	float	buffer;
 	t_coord	new_pos;
 
-	move_step = game->player.walk_direction * game->player.move_speed
-		/ TILE_SIZE;
+	move_step = game->player.walk_direction * game->player.move_speed;
 	game->player.rotation_angle += game->player.turn_direction
 		* game->player.rotation_speed;
 	game->player.rotation_angle = normalize_angle(game->player.rotation_angle);

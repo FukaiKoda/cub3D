@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 21:24:39 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/13 14:15:59 by habdella         ###   ########.fr       */
+/*   Updated: 2025/10/15 23:42:06 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ inline static void	circle(int center_x, int center_y, int radius, t_game *game)
 	}
 }
 
-inline static void	draw_minimap_tiles(t_game *game, int minimap_size)
+inline static void	draw_minimap_tiles(t_game *game)
 {
 	int		i;
 	int		j;
@@ -84,8 +84,8 @@ inline static void	draw_minimap_tiles(t_game *game, int minimap_size)
 				color = LIGHT_GRAY;
 			else
 				color = WHITE;
-			pos = (t_coord){j * minimap_size, i * minimap_size};
-			size = (t_coord){minimap_size, minimap_size};
+			pos = (t_coord){j * TILE_SIZE, i * TILE_SIZE};
+			size = (t_coord){TILE_SIZE, TILE_SIZE};
 			rectangle(game, pos, size, color);
 		}
 	}
@@ -93,15 +93,12 @@ inline static void	draw_minimap_tiles(t_game *game, int minimap_size)
 
 void	display_minimap(t_game *game)
 {
-	int	minimap_size;
-
-	minimap_size = 13;
-	draw_minimap_tiles(game, minimap_size);
-	circle(game->player.pos.x * minimap_size, game->player.pos.y * minimap_size,
+	draw_minimap_tiles(game);
+	circle(game->player.pos.x * TILE_SIZE, game->player.pos.y * TILE_SIZE,
 		3, game);
-	line(game, (t_coord){game->player.pos.x * minimap_size,
-		game->player.pos.y * minimap_size},
+	line(game, (t_coord){game->player.pos.x * TILE_SIZE,
+		game->player.pos.y * TILE_SIZE},
 		(t_coord){(game->player.pos.x + cos(game->player.rotation_angle) * 1)
-		* minimap_size, (game->player.pos.y + sin(game->player.rotation_angle)
-			* 1) * minimap_size}, RED);
+		* TILE_SIZE, (game->player.pos.y + sin(game->player.rotation_angle)
+			* 1) * TILE_SIZE}, RED);
 }

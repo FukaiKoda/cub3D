@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rendering.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 12:22:56 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/15 20:55:22 by habdella         ###   ########.fr       */
+/*   Updated: 2025/10/15 23:41:04 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ inline static void	prepare_wall(t_game *game, t_ray *ray, t_wall *wall)
 
 	angle = ray->ray_angle - game->player.rotation_angle;
 	distance = ray->distance * cos(angle);
-	wall->height = (TILE_SIZE / distance) * game->proj_plane_dist;
+	wall->height = (1.0 / distance) * game->proj_plane_dist;
 	top = game->half_height - (wall->height / 2.0f);
 	bottom = game->half_height + (wall->height / 2.0f);
 	if (top < 0)
@@ -98,7 +98,7 @@ inline static void	render_wall_strip(t_game *game, t_ray *ray, int id)
 		current_frame = game->disp.tex_anim.current_frame;
 		texture = &game->disp.tex_anim.frames[current_frame];
 	}
-	wall.tex_x = (int)((ray->wall_x / (float)TILE_SIZE) * texture->width);
+	wall.tex_x = (int)(ray->wall_x * texture->width);
 	if (wall.tex_x < 0)
 		wall.tex_x = 0;
 	else if (wall.tex_x >= texture->width)
@@ -116,8 +116,8 @@ void	render_3d(t_game *game)
 	if (game->num_rays <= 0)
 		return ;
 	ray_angle = game->player.rotation_angle - game->half_fov;
-	player_pos.x = game->player.pos.x * TILE_SIZE;
-	player_pos.y = game->player.pos.y * TILE_SIZE;
+	player_pos.x = game->player.pos.x;
+	player_pos.y = game->player.pos.y;
 	col = 0;
 	while (col < game->num_rays)
 	{
