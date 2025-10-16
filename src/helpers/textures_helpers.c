@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures_helpers.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 23:08:55 by habdella          #+#    #+#             */
-/*   Updated: 2025/10/15 23:01:57 by habdella         ###   ########.fr       */
+/*   Updated: 2025/10/15 23:36:41 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ bool	is_closed_door(t_game *game, bool *horz_vert, float x, float y)
 	int	map_y;
 
 	i = 0;
-	map_x = (int)(x / TILE_SIZE);
-	map_y = (int)(y / TILE_SIZE);
+	map_x = (int)x;
+	map_y = (int)y;
 	while (i < game->disp.num_doors)
 	{
 		if (game->disp.doors[i].is_open == false)

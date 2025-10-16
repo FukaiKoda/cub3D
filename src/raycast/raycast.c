@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 22:44:40 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/15 20:33:56 by habdella         ###   ########.fr       */
+/*   Updated: 2025/10/15 23:39:50 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ inline static t_hit	select_hit(t_hit horizontal, t_hit vertical, t_ray *ray)
 			ray->wall_side = WE;
 		else
 			ray->wall_side = EA;
-		ray->wall_x = fmod(vertical.pos.y, TILE_SIZE);
+		ray->wall_x = fmod(vertical.pos.y, 1);
 		return (vertical);
 	}
 	if (ray->horizontal_door)
@@ -41,7 +41,7 @@ inline static t_hit	select_hit(t_hit horizontal, t_hit vertical, t_ray *ray)
 		ray->wall_side = NO;
 	else
 		ray->wall_side = SO;
-	ray->wall_x = fmod(horizontal.pos.x, TILE_SIZE);
+	ray->wall_x = fmod(horizontal.pos.x, 1);
 	return (horizontal);
 }
 

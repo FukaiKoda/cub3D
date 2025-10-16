@@ -6,7 +6,7 @@
 /*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 14:00:00 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/08 17:35:46 by oayyoub          ###   ########.fr       */
+/*   Updated: 2025/10/15 23:38:57 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,9 @@ float	distance_between_points(float x1, float y1, float x2, float y2)
 
 int	is_inside_map(t_game *game, float x, float y)
 {
-	float	width;
-	float	height;
-
 	if (x < 0 || y < 0)
 		return (0);
-	width = game->map.map_width * TILE_SIZE;
-	height = game->map.map_height * TILE_SIZE;
-	if (x >= width || y >= height)
+	if (x >= game->map.map_width || y >= game->map.map_height)
 		return (0);
 	return (1);
 }
@@ -61,7 +56,7 @@ bool	is_wall(t_game *game, float x, float y)
 
 	if (!is_inside_map(game, x, y))
 		return (true);
-	map_x = (int)(x / TILE_SIZE);
-	map_y = (int)(y / TILE_SIZE);
+	map_x = (int)x;
+	map_y = (int)y;
 	return (game->map.grid[map_y][map_x] == '1');
 }

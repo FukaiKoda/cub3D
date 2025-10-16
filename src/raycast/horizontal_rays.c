@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   horizontal_rays.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: habdella <habdella@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: oayyoub <oayyoub@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 14:00:00 by oayyoub           #+#    #+#             */
-/*   Updated: 2025/10/15 20:53:01 by habdella         ###   ########.fr       */
+/*   Updated: 2025/10/15 23:37:51 by oayyoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ inline static void	setup_horizontal(t_ray *ray, t_step *step, t_coord player)
 	float	tan_angle;
 
 	tan_angle = tan(ray->ray_angle);
-	step->pos.y = (int)(player.y / TILE_SIZE) *TILE_SIZE;
+	step->pos.y = (int)player.y;
 	if (ray->is_ray_facing_down)
-		step->pos.y += TILE_SIZE;
+		step->pos.y += 1;
 	step->pos.x = player.x + (step->pos.y - player.y) / tan_angle;
-	step->step.y = TILE_SIZE;
+	step->step.y = 1;
 	if (ray->is_ray_facing_up)
 		step->step.y *= -1;
-	step->step.x = TILE_SIZE / tan_angle;
+	step->step.x = 1 / tan_angle;
 	if (ray->is_ray_facing_left && step->step.x > 0)
 		step->step.x *= -1;
 	if (ray->is_ray_facing_right && step->step.x < 0)
